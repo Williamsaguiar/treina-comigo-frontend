@@ -68,7 +68,7 @@ export default function Agendamento() {
     try {
 
       const response = await fetch(
-        'http://127.0.0.1:8000/agendamentos'
+        'https://treina-comigo-api.onrender.com/agendamentos'
       );
 
       const data = await response.json();
@@ -113,7 +113,7 @@ export default function Agendamento() {
     try {
 
       const response = await fetch(
-        'http://127.0.0.1:8000/agendamentos',
+        'https://treina-comigo-api.onrender.com/agendamentos',
         {
           method: 'POST',
 

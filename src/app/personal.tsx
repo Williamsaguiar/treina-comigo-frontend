@@ -46,7 +46,7 @@ export default function Personal() {
     try {
 
       const response = await fetch(
-        `http://127.0.0.1:8000/avaliacoes/${nome}`
+        `https://treina-comigo-api.onrender.com/avaliacoes/${nome}`
       );
 
       const data = await response.json();
@@ -64,7 +64,7 @@ export default function Personal() {
     try {
 
       const response = await fetch(
-        'http://127.0.0.1:8000/favoritos',
+        'https://treina-comigo-api.onrender.com/favoritos',
         {
           method: 'POST',
 
@@ -104,7 +104,7 @@ export default function Personal() {
     try {
 
       const response = await fetch(
-        'http://127.0.0.1:8000/avaliacoes',
+        'https://treina-comigo-api.onrender.com/avaliacoes',
         {
           method: 'POST',
 

@@ -38,7 +38,7 @@ export default function Chat() {
     try {
 
       const response = await fetch(
-        `http://127.0.0.1:8000/mensagens/${nome}`
+        `https://treina-comigo-api.onrender.com/mensagens/${nome}`
       );
 
       const data = await response.json();
@@ -58,7 +58,7 @@ export default function Chat() {
     try {
 
       const response = await fetch(
-        'http://127.0.0.1:8000/mensagens',
+        'https://treina-comigo-api.onrender.com/mensagens',
         {
           method: 'POST',
 

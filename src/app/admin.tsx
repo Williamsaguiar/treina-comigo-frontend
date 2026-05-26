@@ -43,7 +43,7 @@ export default function Admin() {
 
       const usuariosResponse =
         await fetch(
-          'http://127.0.0.1:8000/usuarios'
+          'https://treina-comigo-api.onrender.com/usuarios'
         );
 
       const usuariosData =
@@ -53,7 +53,7 @@ export default function Admin() {
 
       const agendamentosResponse =
         await fetch(
-          'http://127.0.0.1:8000/agendamentos'
+          'https://treina-comigo-api.onrender.com/agendamentos'
         );
 
       const agendamentosData =
@@ -65,7 +65,7 @@ export default function Admin() {
 
       const favoritosResponse =
         await fetch(
-          'http://127.0.0.1:8000/favoritos'
+          'https://treina-comigo-api.onrender.com/favoritos'
         );
 
       const favoritosData =
@@ -77,7 +77,7 @@ export default function Admin() {
 
       const mensagensResponse =
         await fetch(
-          'http://127.0.0.1:8000/mensagens/Carlos'
+          'https://treina-comigo-api.onrender.com/mensagens/Carlos'
         );
 
       const mensagensData =
@@ -89,7 +89,7 @@ export default function Admin() {
 
       const avaliacoesResponse =
         await fetch(
-          'http://127.0.0.1:8000/avaliacoes/Carlos'
+          'https://treina-comigo-api.onrender.com/avaliacoes/Carlos'
         );
 
       const avaliacoesData =

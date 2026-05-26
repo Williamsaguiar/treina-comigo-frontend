@@ -54,7 +54,7 @@ export default function Home() {
     try {
 
       const response = await fetch(
-        'http://127.0.0.1:8000/academias'
+        'https://treina-comigo-api.onrender.com/academias'
       );
 
       const data = await response.json();
@@ -72,7 +72,7 @@ export default function Home() {
     try {
 
       const response = await fetch(
-        'http://127.0.0.1:8000/personais'
+        'https://treina-comigo-api.onrender.com/personais'
       );
 
       const data = await response.json();

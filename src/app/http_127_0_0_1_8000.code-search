@@ -1,0 +1,84 @@
+# Query: http://127.0.0.1:8000
+# ContextLines: 1
+
+18 results - 8 files
+
+gym-app-mobile\src\app\admin.tsx:
+  45          await fetch(
+  46:           'https://treina-comigo-api.onrender.com/usuarios'
+  47          );
+
+  55          await fetch(
+  56:           'https://treina-comigo-api.onrender.com/agendamentos'
+  57          );
+
+  67          await fetch(
+  68:           'https://treina-comigo-api.onrender.com/favoritos'
+  69          );
+
+  79          await fetch(
+  80:           'https://treina-comigo-api.onrender.com/mensagens/Carlos'
+  81          );
+
+  91          await fetch(
+  92:           'https://treina-comigo-api.onrender.com/avaliacoes/Carlos'
+  93          );
+
+gym-app-mobile\src\app\agendamento.tsx:
+   70        const response = await fetch(
+   71:         'https://treina-comigo-api.onrender.com/agendamentos'
+   72        );
+
+  115        const response = await fetch(
+  116:         'https://treina-comigo-api.onrender.com/agendamentos',
+  117          {
+
+gym-app-mobile\src\app\chat.tsx:
+  40        const response = await fetch(
+  41:         `https://treina-comigo-api.onrender.com/mensagens/${nome}`
+  42        );
+
+  60        const response = await fetch(
+  61:         'https://treina-comigo-api.onrender.com/mensagens',
+  62          {
+
+gym-app-mobile\src\app\favoritos.tsx:
+  32        const response = await fetch(
+  33:         'https://treina-comigo-api.onrender.com/favoritos'
+  34        );
+
+gym-app-mobile\src\app\home.tsx:
+  56        const response = await fetch(
+  57:         'https://treina-comigo-api.onrender.com/academias'
+  58        );
+
+  74        const response = await fetch(
+  75:         'https://treina-comigo-api.onrender.com/personais'
+  76        );
+
+gym-app-mobile\src\app\login.tsx:
+  32        const response = await fetch(
+  33:         'https://treina-comigo-api.onrender.com/login',
+  34          {
+
+gym-app-mobile\src\app\meus-agendamentos.tsx:
+  29        const response = await fetch(
+  30:         'https://treina-comigo-api.onrender.com/agendamentos'
+  31        );
+
+  47        await fetch(
+  48:         `https://treina-comigo-api.onrender.com/agendamentos/${id}`,
+  49          {
+
+gym-app-mobile\src\app\personal.tsx:
+   48        const response = await fetch(
+   49:         `https://treina-comigo-api.onrender.com/avaliacoes/${nome}`
+   50        );
+
+   66        const response = await fetch(
+   67:         'https://treina-comigo-api.onrender.com/favoritos',
+   68          {
+
+  106        const response = await fetch(
+  107:         'https://treina-comigo-api.onrender.com/avaliacoes',
+  108          {
