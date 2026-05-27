@@ -45,11 +45,20 @@ export default function Home() {
       const data =
         await response.json();
 
-      setTreinos(data);
+      if (Array.isArray(data)) {
+
+        setTreinos(data);
+
+      } else {
+
+        setTreinos([]);
+      }
 
     } catch (error) {
 
       console.log(error);
+
+      setTreinos([]);
 
     } finally {
 
@@ -68,19 +77,6 @@ export default function Home() {
         <Text style={styles.logo}>
           🏋️ Treina Comigo
         </Text>
-
-        <TouchableOpacity
-          style={styles.profileButton}
-          onPress={() =>
-            router.push('/perfil')
-          }
-        >
-
-          <Text style={styles.profileText}>
-            👤 Perfil
-          </Text>
-
-        </TouchableOpacity>
 
       </View>
 
@@ -107,7 +103,7 @@ export default function Home() {
         <TouchableOpacity
           style={styles.menuCard}
           onPress={() =>
-            router.push('/personal')
+            router.push('/personal' as any)
           }
         >
 
@@ -124,7 +120,7 @@ export default function Home() {
         <TouchableOpacity
           style={styles.menuCard}
           onPress={() =>
-            router.push('/treinos')
+            router.push('/treinos' as any)
           }
         >
 
@@ -141,7 +137,7 @@ export default function Home() {
         <TouchableOpacity
           style={styles.menuCard}
           onPress={() =>
-            router.push('/agendamentos')
+            router.push('/agendamentos' as any)
           }
         >
 
@@ -158,7 +154,7 @@ export default function Home() {
         <TouchableOpacity
           style={styles.menuCard}
           onPress={() =>
-            router.push('/favoritos')
+            router.push('/favoritos' as any)
           }
         >
 
@@ -263,18 +259,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  profileButton: {
-    backgroundColor: '#1F1F1F',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 14,
-  },
-
-  profileText: {
-    color: '#FFF',
-    fontWeight: '600',
-  },
-
   banner: {
     backgroundColor: '#1A1A1A',
     margin: 20,
@@ -370,4 +354,5 @@ const styles = StyleSheet.create({
     color: '#666',
     fontSize: 14,
   },
+
 });
