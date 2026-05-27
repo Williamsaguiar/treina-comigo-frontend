@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from 'react-native';
 
 import {
@@ -68,15 +69,39 @@ export default function Home() {
 
   return (
 
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
 
       {/* HEADER */}
 
       <View style={styles.header}>
 
-        <Text style={styles.logo}>
-          🏋️ Treina Comigo
-        </Text>
+        <View>
+
+          <Text style={styles.welcome}>
+            Bem-vindo 👋
+          </Text>
+
+          <Text style={styles.logo}>
+            Treina Comigo
+          </Text>
+
+        </View>
+
+        <TouchableOpacity
+          style={styles.profileButton}
+          onPress={() =>
+            router.push('/perfil' as any)
+          }
+        >
+
+          <Text style={styles.profileText}>
+            👤
+          </Text>
+
+        </TouchableOpacity>
 
       </View>
 
@@ -84,21 +109,52 @@ export default function Home() {
 
       <View style={styles.banner}>
 
-        <Text style={styles.bannerTitle}>
-          Evolua seu corpo 🚀
-        </Text>
+        <View style={styles.bannerContent}>
 
-        <Text style={styles.bannerText}>
-          Personais, treinos,
-          avaliações e acompanhamento
-          completo em um só lugar.
-        </Text>
+          <Text style={styles.bannerTitle}>
+            Seu treino começa hoje 🚀
+          </Text>
+
+          <Text style={styles.bannerText}>
+            Encontre academias,
+            personais e treinos
+            personalizados perto de você.
+          </Text>
+
+          <TouchableOpacity
+            style={styles.bannerButton}
+          >
+
+            <Text style={styles.bannerButtonText}>
+              Explorar
+            </Text>
+
+          </TouchableOpacity>
+
+        </View>
 
       </View>
 
       {/* MENU */}
 
       <View style={styles.menuGrid}>
+
+        <TouchableOpacity
+          style={styles.menuCard}
+          onPress={() =>
+            router.push('/academia' as any)
+          }
+        >
+
+          <Text style={styles.menuEmoji}>
+            🏋️
+          </Text>
+
+          <Text style={styles.menuText}>
+            Academias
+          </Text>
+
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.menuCard}
@@ -120,23 +176,6 @@ export default function Home() {
         <TouchableOpacity
           style={styles.menuCard}
           onPress={() =>
-            router.push('/treinos' as any)
-          }
-        >
-
-          <Text style={styles.menuEmoji}>
-            🧠
-          </Text>
-
-          <Text style={styles.menuText}>
-            Treinos
-          </Text>
-
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.menuCard}
-          onPress={() =>
             router.push('/agendamentos' as any)
           }
         >
@@ -146,7 +185,7 @@ export default function Home() {
           </Text>
 
           <Text style={styles.menuText}>
-            Agendamentos
+            Agenda
           </Text>
 
         </TouchableOpacity>
@@ -170,10 +209,130 @@ export default function Home() {
 
       </View>
 
+      {/* ACADEMIAS */}
+
+      <Text style={styles.sectionTitle}>
+        🏋️ Academias próximas
+      </Text>
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+        }}
+      >
+
+        <View style={styles.gymCard}>
+
+          <Image
+            source={{
+              uri:
+                'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200',
+            }}
+            style={styles.gymImage}
+          />
+
+          <View style={styles.gymContent}>
+
+            <Text style={styles.gymName}>
+              Smart Gym Recife
+            </Text>
+
+            <Text style={styles.gymInfo}>
+              ⭐ 4.9 • Boa Viagem
+            </Text>
+
+          </View>
+
+        </View>
+
+        <View style={styles.gymCard}>
+
+          <Image
+            source={{
+              uri:
+                'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1200',
+            }}
+            style={styles.gymImage}
+          />
+
+          <View style={styles.gymContent}>
+
+            <Text style={styles.gymName}>
+              Power Fit
+            </Text>
+
+            <Text style={styles.gymInfo}>
+              ⭐ 4.8 • Pina
+            </Text>
+
+          </View>
+
+        </View>
+
+      </ScrollView>
+
+      {/* PERSONAIS */}
+
+      <Text style={styles.sectionTitle}>
+        🧑‍🏫 Personais populares
+      </Text>
+
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+        }}
+      >
+
+        <View style={styles.personalCard}>
+
+          <Image
+            source={{
+              uri:
+                'https://randomuser.me/api/portraits/men/32.jpg',
+            }}
+            style={styles.personalImage}
+          />
+
+          <Text style={styles.personalName}>
+            Carlos Henrique
+          </Text>
+
+          <Text style={styles.personalType}>
+            Hipertrofia
+          </Text>
+
+        </View>
+
+        <View style={styles.personalCard}>
+
+          <Image
+            source={{
+              uri:
+                'https://randomuser.me/api/portraits/women/44.jpg',
+            }}
+            style={styles.personalImage}
+          />
+
+          <Text style={styles.personalName}>
+            Amanda Silva
+          </Text>
+
+          <Text style={styles.personalType}>
+            Emagrecimento
+          </Text>
+
+        </View>
+
+      </ScrollView>
+
       {/* TREINOS */}
 
       <Text style={styles.sectionTitle}>
-        🔥 Treinos
+        🔥 Treinos populares
       </Text>
 
       {loading ? (
@@ -191,23 +350,23 @@ export default function Home() {
 
             <View
               key={treino.id}
-              style={styles.highlightCard}
+              style={styles.treinoCard}
             >
 
-              <Text style={styles.highlightTitle}>
-                {treino.nome || 'Treino'}
+              <Text style={styles.treinoNome}>
+                {treino.nome}
               </Text>
 
-              <Text style={styles.highlightText}>
-                🎯 {treino.objetivo || ''}
+              <Text style={styles.treinoInfo}>
+                🎯 {treino.objetivo}
               </Text>
 
-              <Text style={styles.highlightText}>
-                📈 {treino.nivel || ''}
+              <Text style={styles.treinoInfo}>
+                📈 {treino.nivel}
               </Text>
 
-              <Text style={styles.highlightText}>
-                {treino.descricao || ''}
+              <Text style={styles.treinoDescricao}>
+                {treino.descricao}
               </Text>
 
             </View>
@@ -223,8 +382,6 @@ export default function Home() {
         )
 
       )}
-
-      {/* FOOTER */}
 
       <View style={styles.footer}>
 
@@ -253,30 +410,67 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
+  welcome: {
+    color: '#999',
+    fontSize: 15,
+  },
+
   logo: {
-    color: '#9FE870',
-    fontSize: 28,
+    color: '#FFF',
+    fontSize: 30,
     fontWeight: 'bold',
+    marginTop: 4,
+  },
+
+  profileButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#1A1A1A',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  profileText: {
+    color: '#FFF',
+    fontSize: 22,
   },
 
   banner: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: '#9FE870',
     margin: 20,
-    borderRadius: 24,
-    padding: 24,
+    borderRadius: 28,
+    padding: 25,
   },
 
+  bannerContent: {},
+
   bannerTitle: {
-    color: '#FFF',
-    fontSize: 30,
+    color: '#000',
+    fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 12,
   },
 
   bannerText: {
-    color: '#CCC',
+    color: '#222',
     fontSize: 16,
     lineHeight: 24,
+  },
+
+  bannerButton: {
+    backgroundColor: '#000',
+    marginTop: 20,
+    paddingVertical: 14,
+    borderRadius: 16,
+    width: 140,
+    alignItems: 'center',
+  },
+
+  bannerButtonText: {
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 
   menuGrid: {
@@ -289,20 +483,20 @@ const styles = StyleSheet.create({
   menuCard: {
     width: '47%',
     backgroundColor: '#1A1A1A',
-    borderRadius: 22,
-    paddingVertical: 30,
+    borderRadius: 24,
+    paddingVertical: 28,
     alignItems: 'center',
     marginBottom: 18,
   },
 
   menuEmoji: {
     fontSize: 34,
-    marginBottom: 12,
+    marginBottom: 10,
   },
 
   menuText: {
     color: '#FFF',
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '600',
   },
 
@@ -310,43 +504,104 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 30,
+    marginTop: 25,
     marginBottom: 20,
     paddingHorizontal: 20,
   },
 
-  highlightCard: {
+  gymCard: {
+    width: 260,
+    backgroundColor: '#1A1A1A',
+    borderRadius: 24,
+    marginRight: 16,
+    overflow: 'hidden',
+  },
+
+  gymImage: {
+    width: '100%',
+    height: 160,
+  },
+
+  gymContent: {
+    padding: 16,
+  },
+
+  gymName: {
+    color: '#FFF',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+
+  gymInfo: {
+    color: '#AAA',
+    marginTop: 8,
+  },
+
+  personalCard: {
+    width: 170,
+    backgroundColor: '#1A1A1A',
+    borderRadius: 24,
+    padding: 20,
+    alignItems: 'center',
+    marginRight: 16,
+  },
+
+  personalImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginBottom: 14,
+  },
+
+  personalName: {
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
+  personalType: {
+    color: '#9FE870',
+    marginTop: 8,
+  },
+
+  treinoCard: {
     backgroundColor: '#1A1A1A',
     marginHorizontal: 20,
     marginBottom: 20,
-    borderRadius: 20,
+    borderRadius: 22,
     padding: 20,
   },
 
-  highlightTitle: {
-    color: '#9FE870',
-    fontSize: 20,
+  treinoNome: {
+    color: '#FFF',
+    fontSize: 21,
     fontWeight: 'bold',
     marginBottom: 10,
   },
 
-  highlightText: {
-    color: '#CCC',
-    fontSize: 15,
-    lineHeight: 22,
+  treinoInfo: {
+    color: '#9FE870',
     marginBottom: 6,
+    fontSize: 15,
+  },
+
+  treinoDescricao: {
+    color: '#CCC',
+    marginTop: 10,
+    lineHeight: 22,
   },
 
   loadingText: {
-    color: '#CCC',
-    fontSize: 16,
+    color: '#AAA',
     textAlign: 'center',
     marginTop: 20,
+    fontSize: 16,
   },
 
   footer: {
-    marginTop: 20,
-    marginBottom: 40,
+    marginTop: 30,
+    marginBottom: 50,
     alignItems: 'center',
   },
 
