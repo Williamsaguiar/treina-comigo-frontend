@@ -2,369 +2,241 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
-  Image,
   TouchableOpacity,
-  TextInput,
+  ScrollView,
 } from 'react-native';
+
+import {
+  router,
+} from 'expo-router';
 
 import {
   useEffect,
   useState,
-  useContext,
 } from 'react';
-
-import { router } from 'expo-router';
-
-import { AuthContext } from '../contexts/AuthContext';
 
 export default function Home() {
 
-  const { usuario } = useContext(AuthContext);
+  const [treinos,
+    setTreinos] =
+    useState<any[]>([]);
 
-  const [academias, setAcademias] = useState<any[]>([]);
-
-  const [personais, setPersonais] = useState<any[]>([]);
-
-  const [busca, setBusca] = useState('');
-
-  const [
-    categoriaSelecionada,
-    setCategoriaSelecionada
-  ] = useState('');
+  const [loading,
+    setLoading] =
+    useState(true);
 
   useEffect(() => {
 
-    buscarAcademias();
-
-    buscarPersonais();
+    buscarTreinos();
 
   }, []);
 
-  const categorias = [
-    'Musculação',
-    'Funcional',
-    'Crossfit',
-    'Emagrecimento',
-    'Hipertrofia',
-  ];
-
-  async function buscarAcademias() {
+  async function buscarTreinos() {
 
     try {
 
-      const response = await fetch(
-        'https://treina-comigo-api.onrender.com/academias'
-      );
+      setLoading(true);
 
-      const data = await response.json();
+      const response =
+        await fetch(
+          'https://treina-comigo-api.onrender.com/treinos'
+        );
 
-      setAcademias(data);
+      const data =
+        await response.json();
+
+      setTreinos(data);
 
     } catch (error) {
 
       console.log(error);
+
+    } finally {
+
+      setLoading(false);
     }
   }
-
-  async function buscarPersonais() {
-
-    try {
-
-      const response = await fetch(
-        'https://treina-comigo-api.onrender.com/personais'
-      );
-
-      const data = await response.json();
-
-      setPersonais(data);
-
-    } catch (error) {
-
-      console.log(error);
-    }
-  }
-
-  const academiasFiltradas =
-    academias.filter((academia) =>
-
-      academia.nome
-        .toLowerCase()
-        .includes(
-          busca.toLowerCase()
-        )
-    );
-
-  const personaisFiltrados =
-    personais.filter((personal) => {
-
-      const matchBusca =
-        personal.nome
-          .toLowerCase()
-          .includes(
-            busca.toLowerCase()
-          );
-
-      const matchCategoria =
-
-        categoriaSelecionada === ''
-
-        ||
-
-        personal.especialidade
-          ?.toLowerCase()
-          .includes(
-            categoriaSelecionada.toLowerCase()
-          );
-
-      return (
-        matchBusca &&
-        matchCategoria
-      );
-    });
 
   return (
 
     <ScrollView style={styles.container}>
 
+      {/* HEADER */}
+
       <View style={styles.header}>
 
-        <Text style={styles.location}>
-          📍 Recife, PE
+        <Text style={styles.logo}>
+          🏋️ Treina Comigo
         </Text>
-
-        <Text style={styles.title}>
-          Olá, {usuario?.nome} 👋
-        </Text>
-
-        <Text style={styles.subtitle}>
-          Vamos treinar hoje?
-        </Text>
-
-        <TextInput
-          placeholder="Buscar personal ou academia"
-          placeholderTextColor="#777"
-          value={busca}
-          onChangeText={setBusca}
-          style={styles.input}
-        />
-
-        <TouchableOpacity
-          style={styles.profileButton}
-          onPress={() => router.push('/perfil')}
-        >
-
-          <Text style={styles.profileText}>
-            Ver Perfil
-          </Text>
-
-        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.profileButton}
           onPress={() =>
-            router.push('/meus-agendamentos')
+            router.push('/perfil')
           }
         >
 
           <Text style={styles.profileText}>
-            Meus Treinos
+            👤 Perfil
           </Text>
 
         </TouchableOpacity>
-
-        <TouchableOpacity
-        style={styles.profileButton}
-        onPress={() =>
-            router.push('/favoritos')
-            }
-        >
-            <Text style={styles.profileText}>
-                Favoritos ❤️
-            </Text>
-        </TouchableOpacity>
-
-
-        <TouchableOpacity
-        style={styles.profileButton}
-        onPress={() =>
-          router.push('/mapa')
-          }
-        >
-          
-          <Text style={styles.profileText}>
-            📍 Ver mapa
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-        style={styles.profileButton}
-        onPress={() =>
-          router.push('/admin')
-          }
-        >
-          <Text style={styles.profileText}>
-            👑 Painel Admin
-          </Text>
-        </TouchableOpacity>
-
 
       </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.categoryContainer}
-      >
+      {/* BANNER */}
+
+      <View style={styles.banner}>
+
+        <Text style={styles.bannerTitle}>
+          Evolua seu corpo 🚀
+        </Text>
+
+        <Text style={styles.bannerText}>
+          Personais, treinos,
+          avaliações e acompanhamento
+          completo em um só lugar.
+        </Text>
+
+      </View>
+
+      {/* MENU */}
+
+      <View style={styles.menuGrid}>
 
         <TouchableOpacity
-          style={[
-            styles.categoryButton,
-
-            categoriaSelecionada === '' &&
-              styles.categorySelected
-          ]}
+          style={styles.menuCard}
           onPress={() =>
-            setCategoriaSelecionada('')
+            router.push('/personal')
           }
         >
 
-          <Text style={styles.categoryText}>
-            Todos
+          <Text style={styles.menuEmoji}>
+            🧑‍🏫
+          </Text>
+
+          <Text style={styles.menuText}>
+            Personais
           </Text>
 
         </TouchableOpacity>
 
-        {categorias.map((categoria) => (
-
-          <TouchableOpacity
-            key={categoria}
-            style={[
-              styles.categoryButton,
-
-              categoriaSelecionada === categoria &&
-                styles.categorySelected
-            ]}
-            onPress={() =>
-              setCategoriaSelecionada(categoria)
-            }
-          >
-
-            <Text style={styles.categoryText}>
-              {categoria}
-            </Text>
-
-          </TouchableOpacity>
-
-        ))}
-
-      </ScrollView>
-
-      <Text style={styles.sectionTitle}>
-        Academias próximas
-      </Text>
-
-      {academiasFiltradas.map((academia) => (
-
         <TouchableOpacity
-          key={academia.id}
-          style={styles.card}
+          style={styles.menuCard}
           onPress={() =>
-            router.push({
-              pathname: '/academia',
-
-              params: {
-                nome: academia.nome,
-                imagem: academia.imagem,
-                avaliacao: academia.avaliacao,
-                distancia: academia.distancia,
-                diaria: academia.diaria,
-              },
-            })
+            router.push('/treinos')
           }
         >
 
-          <Image
-            source={{
-              uri: academia.imagem
-            }}
-            style={styles.image}
-          />
+          <Text style={styles.menuEmoji}>
+            🧠
+          </Text>
 
-          <View style={styles.cardContent}>
-
-            <Text style={styles.gymName}>
-              {academia.nome}
-            </Text>
-
-            <Text style={styles.gymInfo}>
-              ⭐ {academia.avaliacao} • {academia.distancia}
-            </Text>
-
-            <Text style={styles.price}>
-              Diária R$ {academia.diaria}
-            </Text>
-
-          </View>
+          <Text style={styles.menuText}>
+            Treinos
+          </Text>
 
         </TouchableOpacity>
 
-      ))}
-
-      <Text style={styles.sectionTitle}>
-        Personais em destaque
-      </Text>
-
-      {personaisFiltrados.map((personal) => (
-
         <TouchableOpacity
-          key={personal.id}
-          style={styles.card}
+          style={styles.menuCard}
           onPress={() =>
-            router.push({
-              pathname: '/personal',
-
-              params: {
-                nome: personal.nome,
-                foto: personal.foto,
-                especialidade: personal.especialidade,
-                descricao: personal.descricao,
-                valor: personal.valor_hora,
-              },
-            })
+            router.push('/agendamentos')
           }
         >
 
-          <Image
-            source={{
-              uri: personal.foto
-            }}
-            style={styles.image}
-          />
+          <Text style={styles.menuEmoji}>
+            📅
+          </Text>
 
-          <View style={styles.cardContent}>
-
-            <Text style={styles.gymName}>
-              {personal.nome}
-            </Text>
-
-            <Text style={styles.gymInfo}>
-              {personal.especialidade}
-            </Text>
-
-            <Text style={styles.gymInfo}>
-              {personal.descricao}
-            </Text>
-
-            <Text style={styles.price}>
-              R$ {personal.valor_hora}/hora
-            </Text>
-
-          </View>
+          <Text style={styles.menuText}>
+            Agendamentos
+          </Text>
 
         </TouchableOpacity>
 
-      ))}
+        <TouchableOpacity
+          style={styles.menuCard}
+          onPress={() =>
+            router.push('/favoritos')
+          }
+        >
+
+          <Text style={styles.menuEmoji}>
+            ❤️
+          </Text>
+
+          <Text style={styles.menuText}>
+            Favoritos
+          </Text>
+
+        </TouchableOpacity>
+
+      </View>
+
+      {/* TREINOS */}
+
+      <Text style={styles.sectionTitle}>
+        🔥 Treinos
+      </Text>
+
+      {loading ? (
+
+        <Text style={styles.loadingText}>
+          Carregando treinos...
+        </Text>
+
+      ) : (
+
+        Array.isArray(treinos)
+        && treinos.length > 0 ? (
+
+          treinos.map((treino) => (
+
+            <View
+              key={treino.id}
+              style={styles.highlightCard}
+            >
+
+              <Text style={styles.highlightTitle}>
+                {treino.nome || 'Treino'}
+              </Text>
+
+              <Text style={styles.highlightText}>
+                🎯 {treino.objetivo || ''}
+              </Text>
+
+              <Text style={styles.highlightText}>
+                📈 {treino.nivel || ''}
+              </Text>
+
+              <Text style={styles.highlightText}>
+                {treino.descricao || ''}
+              </Text>
+
+            </View>
+
+          ))
+
+        ) : (
+
+          <Text style={styles.loadingText}>
+            Nenhum treino encontrado.
+          </Text>
+
+        )
+
+      )}
+
+      {/* FOOTER */}
+
+      <View style={styles.footer}>
+
+        <Text style={styles.footerText}>
+          🚀 Treina Comigo Fitness App
+        </Text>
+
+      </View>
 
     </ScrollView>
   );
@@ -375,116 +247,127 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0F0F0F',
-    paddingHorizontal: 20,
   },
 
   header: {
     marginTop: 60,
-    marginBottom: 25,
-  },
-
-  location: {
-    color: '#9FE870',
-    fontSize: 14,
-    marginBottom: 10,
-  },
-
-  title: {
-    color: '#FFF',
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-
-  subtitle: {
-    color: '#AAA',
-    fontSize: 16,
-    marginTop: 5,
-  },
-
-  input: {
-    backgroundColor: '#1A1A1A',
-    borderRadius: 14,
-    padding: 16,
-    color: '#FFF',
-    marginTop: 20,
-    marginBottom: 15,
-  },
-
-  profileButton: {
-    backgroundColor: '#9FE870',
-    padding: 12,
-    borderRadius: 12,
-    marginTop: 10,
-    width: 150,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
 
+  logo: {
+    color: '#9FE870',
+    fontSize: 28,
+    fontWeight: 'bold',
+  },
+
+  profileButton: {
+    backgroundColor: '#1F1F1F',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 14,
+  },
+
   profileText: {
-    color: '#000',
-    fontWeight: 'bold',
-  },
-
-  categoryContainer: {
-    marginTop: 10,
-    marginBottom: 20,
-  },
-
-  categoryButton: {
-    backgroundColor: '#1A1A1A',
-    paddingVertical: 12,
-    paddingHorizontal: 18,
-    borderRadius: 20,
-    marginRight: 10,
-  },
-
-  categorySelected: {
-    backgroundColor: '#9FE870',
-  },
-
-  categoryText: {
     color: '#FFF',
+    fontWeight: '600',
+  },
+
+  banner: {
+    backgroundColor: '#1A1A1A',
+    margin: 20,
+    borderRadius: 24,
+    padding: 24,
+  },
+
+  bannerTitle: {
+    color: '#FFF',
+    fontSize: 30,
     fontWeight: 'bold',
+    marginBottom: 12,
+  },
+
+  bannerText: {
+    color: '#CCC',
+    fontSize: 16,
+    lineHeight: 24,
+  },
+
+  menuGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+
+  menuCard: {
+    width: '47%',
+    backgroundColor: '#1A1A1A',
+    borderRadius: 22,
+    paddingVertical: 30,
+    alignItems: 'center',
+    marginBottom: 18,
+  },
+
+  menuEmoji: {
+    fontSize: 34,
+    marginBottom: 12,
+  },
+
+  menuText: {
+    color: '#FFF',
+    fontSize: 18,
+    fontWeight: '600',
   },
 
   sectionTitle: {
     color: '#FFF',
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
+    marginTop: 30,
     marginBottom: 20,
-    marginTop: 10,
+    paddingHorizontal: 20,
   },
 
-  card: {
+  highlightCard: {
     backgroundColor: '#1A1A1A',
-    borderRadius: 20,
-    overflow: 'hidden',
+    marginHorizontal: 20,
     marginBottom: 20,
+    borderRadius: 20,
+    padding: 20,
   },
 
-  image: {
-    width: '100%',
-    height: 180,
-  },
-
-  cardContent: {
-    padding: 15,
-  },
-
-  gymName: {
-    color: '#FFF',
+  highlightTitle: {
+    color: '#9FE870',
     fontSize: 20,
     fontWeight: 'bold',
+    marginBottom: 10,
   },
 
-  gymInfo: {
-    color: '#AAA',
-    marginTop: 5,
+  highlightText: {
+    color: '#CCC',
+    fontSize: 15,
+    lineHeight: 22,
+    marginBottom: 6,
   },
 
-  price: {
-    color: '#9FE870',
-    marginTop: 10,
-    fontSize: 18,
-    fontWeight: 'bold',
+  loadingText: {
+    color: '#CCC',
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
+  },
+
+  footer: {
+    marginTop: 20,
+    marginBottom: 40,
+    alignItems: 'center',
+  },
+
+  footerText: {
+    color: '#666',
+    fontSize: 14,
   },
 });
