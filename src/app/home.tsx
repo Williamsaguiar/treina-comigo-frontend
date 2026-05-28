@@ -5,11 +5,10 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 
-import {
-  router,
-} from 'expo-router';
+import { router } from 'expo-router';
 
 import {
   useEffect,
@@ -18,53 +17,128 @@ import {
 
 export default function Home() {
 
-  const [treinos,
-    setTreinos] =
-    useState<any[]>([]);
-
-  const [loading,
-    setLoading] =
-    useState(true);
+  const [treinos, setTreinos] = useState<any[]>([]);
+  const [academias, setAcademias] = useState<any[]>([]);
+  const [personais, setPersonais] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
 
-    buscarTreinos();
+    carregarDados();
 
   }, []);
 
-  async function buscarTreinos() {
+  async function carregarDados() {
 
     try {
 
       setLoading(true);
 
-      const response =
-        await fetch(
-          'https://treina-comigo-api.onrender.com/treinos'
-        );
-
-      const data =
-        await response.json();
-
-      if (Array.isArray(data)) {
-
-        setTreinos(data);
-
-      } else {
-
-        setTreinos([]);
-      }
+      await Promise.all([
+        buscarTreinos(),
+        buscarAcademias(),
+        buscarPersonais(),
+      ]);
 
     } catch (error) {
 
       console.log(error);
 
-      setTreinos([]);
-
     } finally {
 
       setLoading(false);
     }
+  }
+
+  async function buscarTreinos() {
+
+    try {
+
+      const response = await fetch(
+        'https://treina-comigo-api.onrender.com/treinos'
+      );
+
+      if (!response.ok) {
+        throw new Error('Erro ao buscar treinos');
+      }
+
+      const data = await response.json();
+
+      if (Array.isArray(data)) {
+        setTreinos(data);
+      }
+
+    } catch (error) {
+
+      console.log(error);
+    }
+  }
+
+  async function buscarAcademias() {
+
+    try {
+
+      const response = await fetch(
+        'https://treina-comigo-api.onrender.com/academias'
+      );
+
+      if (!response.ok) {
+        throw new Error('Erro ao buscar academias');
+      }
+
+      const data = await response.json();
+
+      if (Array.isArray(data)) {
+        setAcademias(data);
+      }
+
+    } catch (error) {
+
+      console.log(error);
+    }
+  }
+
+  async function buscarPersonais() {
+
+    try {
+
+      const response = await fetch(
+        'https://treina-comigo-api.onrender.com/personais'
+      );
+
+      if (!response.ok) {
+        throw new Error('Erro ao buscar personais');
+      }
+
+      const data = await response.json();
+
+      if (Array.isArray(data)) {
+        setPersonais(data);
+      }
+
+    } catch (error) {
+
+      console.log(error);
+    }
+  }
+
+  if (loading) {
+
+    return (
+
+      <View style={styles.loadingContainer}>
+
+        <ActivityIndicator
+          size="large"
+          color="#9FE870"
+        />
+
+        <Text style={styles.loadingText}>
+          Carregando...
+        </Text>
+
+      </View>
+    );
   }
 
   return (
@@ -90,48 +164,20 @@ export default function Home() {
 
         </View>
 
-        <TouchableOpacity
-          style={styles.profileButton}
-          onPress={() =>
-            router.push('/perfil' as any)
-          }
-        >
-
-          <Text style={styles.profileText}>
-            👤
-          </Text>
-
-        </TouchableOpacity>
-
       </View>
 
       {/* BANNER */}
 
       <View style={styles.banner}>
 
-        <View style={styles.bannerContent}>
+        <Text style={styles.bannerTitle}>
+          Seu treino começa hoje 🚀
+        </Text>
 
-          <Text style={styles.bannerTitle}>
-            Seu treino começa hoje 🚀
-          </Text>
-
-          <Text style={styles.bannerText}>
-            Encontre academias,
-            personais e treinos
-            personalizados perto de você.
-          </Text>
-
-          <TouchableOpacity
-            style={styles.bannerButton}
-          >
-
-            <Text style={styles.bannerButtonText}>
-              Explorar
-            </Text>
-
-          </TouchableOpacity>
-
-        </View>
+        <Text style={styles.bannerText}>
+          Encontre academias, personais
+          e treinos personalizados.
+        </Text>
 
       </View>
 
@@ -159,23 +205,6 @@ export default function Home() {
         <TouchableOpacity
           style={styles.menuCard}
           onPress={() =>
-            router.push('/personal' as any)
-          }
-        >
-
-          <Text style={styles.menuEmoji}>
-            🧑‍🏫
-          </Text>
-
-          <Text style={styles.menuText}>
-            Personais
-          </Text>
-
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.menuCard}
-          onPress={() =>
             router.push('/agendamentos' as any)
           }
         >
@@ -186,23 +215,6 @@ export default function Home() {
 
           <Text style={styles.menuText}>
             Agenda
-          </Text>
-
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.menuCard}
-          onPress={() =>
-            router.push('/favoritos' as any)
-          }
-        >
-
-          <Text style={styles.menuEmoji}>
-            ❤️
-          </Text>
-
-          <Text style={styles.menuText}>
-            Favoritos
           </Text>
 
         </TouchableOpacity>
@@ -223,60 +235,42 @@ export default function Home() {
         }}
       >
 
-        <View style={styles.gymCard}>
+        {academias.map((academia) => (
 
-          <Image
-            source={{
-              uri:
-                'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200',
-            }}
-            style={styles.gymImage}
-          />
+          <View
+            key={academia.id}
+            style={styles.gymCard}
+          >
 
-          <View style={styles.gymContent}>
+            <Image
+              source={{
+                uri: academia.imagem,
+              }}
+              style={styles.gymImage}
+            />
 
-            <Text style={styles.gymName}>
-              Smart Gym Recife
-            </Text>
+            <View style={styles.gymContent}>
 
-            <Text style={styles.gymInfo}>
-              ⭐ 4.9 • Boa Viagem
-            </Text>
+              <Text style={styles.gymName}>
+                {academia.nome}
+              </Text>
 
-          </View>
+              <Text style={styles.gymInfo}>
+                ⭐ {academia.nota} • {academia.bairro}
+              </Text>
 
-        </View>
-
-        <View style={styles.gymCard}>
-
-          <Image
-            source={{
-              uri:
-                'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1200',
-            }}
-            style={styles.gymImage}
-          />
-
-          <View style={styles.gymContent}>
-
-            <Text style={styles.gymName}>
-              Power Fit
-            </Text>
-
-            <Text style={styles.gymInfo}>
-              ⭐ 4.8 • Pina
-            </Text>
+            </View>
 
           </View>
 
-        </View>
+        ))}
 
       </ScrollView>
 
       {/* PERSONAIS */}
 
       <Text style={styles.sectionTitle}>
-        🧑‍🏫 Personais populares
+        🧑‍🏫 Personais
       </Text>
 
       <ScrollView
@@ -287,45 +281,31 @@ export default function Home() {
         }}
       >
 
-        <View style={styles.personalCard}>
+        {personais.map((personal) => (
 
-          <Image
-            source={{
-              uri:
-                'https://randomuser.me/api/portraits/men/32.jpg',
-            }}
-            style={styles.personalImage}
-          />
+          <View
+            key={personal.id}
+            style={styles.personalCard}
+          >
 
-          <Text style={styles.personalName}>
-            Carlos Henrique
-          </Text>
+            <Image
+              source={{
+                uri: personal.foto,
+              }}
+              style={styles.personalImage}
+            />
 
-          <Text style={styles.personalType}>
-            Hipertrofia
-          </Text>
+            <Text style={styles.personalName}>
+              {personal.nome}
+            </Text>
 
-        </View>
+            <Text style={styles.personalType}>
+              {personal.especialidade}
+            </Text>
 
-        <View style={styles.personalCard}>
+          </View>
 
-          <Image
-            source={{
-              uri:
-                'https://randomuser.me/api/portraits/women/44.jpg',
-            }}
-            style={styles.personalImage}
-          />
-
-          <Text style={styles.personalName}>
-            Amanda Silva
-          </Text>
-
-          <Text style={styles.personalType}>
-            Emagrecimento
-          </Text>
-
-        </View>
+        ))}
 
       </ScrollView>
 
@@ -335,58 +315,37 @@ export default function Home() {
         🔥 Treinos populares
       </Text>
 
-      {loading ? (
+      {treinos.map((treino) => (
 
-        <Text style={styles.loadingText}>
-          Carregando treinos...
-        </Text>
+        <View
+          key={treino.id}
+          style={styles.treinoCard}
+        >
 
-      ) : (
-
-        Array.isArray(treinos)
-        && treinos.length > 0 ? (
-
-          treinos.map((treino) => (
-
-            <View
-              key={treino.id}
-              style={styles.treinoCard}
-            >
-
-              <Text style={styles.treinoNome}>
-                {treino.nome}
-              </Text>
-
-              <Text style={styles.treinoInfo}>
-                🎯 {treino.objetivo}
-              </Text>
-
-              <Text style={styles.treinoInfo}>
-                📈 {treino.nivel}
-              </Text>
-
-              <Text style={styles.treinoDescricao}>
-                {treino.descricao}
-              </Text>
-
-            </View>
-
-          ))
-
-        ) : (
-
-          <Text style={styles.loadingText}>
-            Nenhum treino encontrado.
+          <Text style={styles.treinoNome}>
+            {treino.nome}
           </Text>
 
-        )
+          <Text style={styles.treinoInfo}>
+            🎯 {treino.objetivo}
+          </Text>
 
-      )}
+          <Text style={styles.treinoInfo}>
+            📈 {treino.nivel}
+          </Text>
+
+          <Text style={styles.treinoDescricao}>
+            {treino.descricao}
+          </Text>
+
+        </View>
+
+      ))}
 
       <View style={styles.footer}>
 
         <Text style={styles.footerText}>
-          🚀 Treina Comigo Fitness App
+          🚀 Treina Comigo Fitness
         </Text>
 
       </View>
@@ -402,12 +361,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#0F0F0F',
   },
 
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: '#0F0F0F',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  loadingText: {
+    color: '#FFF',
+    marginTop: 15,
+    fontSize: 16,
+  },
+
   header: {
     marginTop: 60,
     paddingHorizontal: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
 
   welcome: {
@@ -422,28 +391,12 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 
-  profileButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#1A1A1A',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  profileText: {
-    color: '#FFF',
-    fontSize: 22,
-  },
-
   banner: {
     backgroundColor: '#9FE870',
     margin: 20,
     borderRadius: 28,
     padding: 25,
   },
-
-  bannerContent: {},
 
   bannerTitle: {
     color: '#000',
@@ -458,30 +411,14 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
 
-  bannerButton: {
-    backgroundColor: '#000',
-    marginTop: 20,
-    paddingVertical: 14,
-    borderRadius: 16,
-    width: 140,
-    alignItems: 'center',
-  },
-
-  bannerButtonText: {
-    color: '#FFF',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-
   menuGrid: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
   },
 
   menuCard: {
-    width: '47%',
+    width: '48%',
     backgroundColor: '#1A1A1A',
     borderRadius: 24,
     paddingVertical: 28,
@@ -590,13 +527,6 @@ const styles = StyleSheet.create({
     color: '#CCC',
     marginTop: 10,
     lineHeight: 22,
-  },
-
-  loadingText: {
-    color: '#AAA',
-    textAlign: 'center',
-    marginTop: 20,
-    fontSize: 16,
   },
 
   footer: {
